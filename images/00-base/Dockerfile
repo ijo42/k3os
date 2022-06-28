@@ -1,7 +1,9 @@
 ### BASE ###
 FROM alpine:3.14 as base
 ARG ARCH
-RUN apk --no-cache add \
+RUN \
+    echo http://dl-2.alpinelinux.org/alpine/edge/community/ >> /etc/apk/repositories && \
+    apk --no-cache add  \
     bash \
     bash-completion \
     blkid \
@@ -65,9 +67,11 @@ RUN apk --no-cache add \
     wpa_supplicant \
     xfsprogs \
     xz \
+    nano \
+    tailscale \
  && mv -vf /etc/conf.d/qemu-guest-agent /etc/conf.d/qemu-guest-agent.orig \
  && mv -vf /etc/conf.d/rngd             /etc/conf.d/rngd.orig \
  && mv -vf /etc/conf.d/udev-settle      /etc/conf.d/udev-settle.orig \
 # replicate the default "no idea, friend" behavior of virt-what
  && touch /usr/sbin/virt-what \
- && chmod +x /usr/sbin/virt-what
+ && chmod +x /usr/sbin/virt-what && rc-update add tailscale
